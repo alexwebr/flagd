@@ -12,7 +12,7 @@ CTF challenge, just `tailf` this log file and hook up your machine to a projecto
 Assumptions made by flagd
 -----------------------
 Keys (the things that teams are trying to recover) are strings of arbitrary length, that are
-secret an unguessable.
+secret and unguessable.
 A good candidate for a key is `head -c 100 /dev/urandom | sha256sum`
 
 Participants are organized into teams
@@ -29,7 +29,7 @@ message (on the same port the client sent the packet from), indicating that the 
 captured, or not.
 
 In bash:
-`echo -n "MyTeamName:"$(cat keyfile) | md5sum | nc -u <ip> <port>
+`echo -n "MyTeamName:"$(cat keyfile) | md5sum | nc -u <ip> <port>`
 
 How it works
 -------------
