@@ -110,26 +110,34 @@ while true do
     alog:write("["..os.date().."] BRUTE: " .. addr .. "\n")
     alog:flush()
   else
-    -- We want to account for md5sum implementations that output uppercase hex letters
-    local hash = hashes[string.lower(payload)]
-    if hash then -- If the hash they gave us is a valid one (e.g., real team, real key)
-      if hash.complete then
-        s:sendto("ALREADY CAPTURED\n", addr, port)
-        alog:write("["..os.date().."] ALREADY: '" .. hash.team .. "', key #" .. hash.number .. ", " .. addr .. "\n")
-        alog:flush()
-      else -- If this is the first time this hash has been done, we write to the log
-        hash.complete = true
-        s:sendto("CONGRATULATIONS - KEY "..tostring(hash.number).." CAPTURED\n", addr, port)
-        clog:write("["..os.date("%a %I:%M%p").."] Team '" .. hash.team .. "' captured key #" ..  tostring(hash.number) .. "!")
-        if show_key_info and hash.desc then
-          clog:write(" (" .. hash.desc .. ")") -- include the hash description if there is one present, and they are not globally disabled
+    if #payload == 32 and string.match(payload, "^[a-fA-F0-9]+$") then
+      -- We want to account for md5sum implementations that output uppercase hex letters
+      local hash = hashes[string.lower(payload)]
+      if hash then -- If the hash they gave us is a valid one (e.g., real team, real key)
+        if hash.complete then
+          s:sendto("ALREADY CAPTURED\n", addr, port)
+          alog:write("["..os.date().."] ALREADY CAPTURED: '" .. hash.team .. "', key #" .. hash.number .. ", " .. addr .. "\n")
+          alog:flush()
+        else -- If this is the first time this hash has been done, we write to the log
+          hash.complete = true
+          s:sendto("CONGRATULATIONS - KEY "..tostring(hash.number).." CAPTURED\n", addr, port)
+          clog:write("["..os.date("%a %I:%M%p").."] Team '" .. hash.team .. "' captured key #" ..  tostring(hash.number) .. "!")
+          if show_key_info and hash.desc then
+            clog:write(" (" .. hash.desc .. ")") -- include the hash description if there is one present, and they are not globally disabled
+          end
+          clog:write("\n")
+          clog:flush()
+          alog:write("["..os.date().."] CAPTURE: '" .. hash.team .. "', key #" .. hash.number .. ", " .. addr .. "\n")
+          alog:flush()
         end
-        clog:write("\n")
-        clog:flush()
+      else -- If there is no matching hash
+        s:sendto("NOPE.\n", addr, port)
+        alog:write("["..os.date().."] NO MATCH: " .. addr .. "\n")
+        alog:flush()
       end
-    else -- If there is no matching hash
-      s:sendto("NOPE.\n", addr, port)
-      alog:write("["..os.date().."] INCORRECT: " .. addr .. "\n")
+    else
+      s:sendto("EXPECTED 32 HEX CHARACTERS\n", addr, port)
+      alog:write("["..os.date().."] BAD FORMAT: " .. addr .. "\n")
       alog:flush()
     end
   end
