@@ -31,13 +31,13 @@ end
 dofile(tostring(arg[1]))
 required_configs = {
   { param = "teams",           type = "table"  },
-  { param = "keys",            type = "table"  },
+  { param = "flags",            type = "table"  },
   { param = "port",            type = "number" },
   { param = "admin_log",       type = "string" },
   { param = "capture_log",     type = "string" },
   { param = "ip_address",      type = "string" },
   { param = "submission_delay",type = "number" },
-  { param = "show_key_info",   type = "boolean" },
+  { param = "show_flag_info",   type = "boolean" },
 }
 -- Validate configuration
 for _,v in ipairs(required_configs) do
@@ -68,11 +68,11 @@ end
 print("Logging captures to '" .. capture_log .. "'")
 
 -- Calculate all hashes in advance, so that we can do hashtable lookups FOR SPEED
-io.write("Precalculating " .. tostring(#teams * #keys) .. " hashes before accepting connections...")
+io.write("Precalculating " .. tostring(#teams * #flags) .. " hashes before accepting connections...")
 io.flush()
 hashes = {}
 for _,t in ipairs(teams) do
-  for i,k in ipairs(keys) do
+  for i,k in ipairs(flags) do
     -- Index the table by the hash FOR SPEED
     hashes[ hash(t .. ":" .. string.lower(k.val)) ] = {team = t, number = i, desc = k.desc, complete = false}
   end
@@ -91,7 +91,7 @@ print("flagd up and listening on " .. ip_address .. ":" .. port .. " (started in
 -- Write critical information to admin log
 alog:write("\nSTART: flagd started at " .. os.date() .. "\n")
 alog:write("STAT: started in " .. os.clock() .. " seconds\n")
-alog:write("STAT: precomputed " .. #teams * #keys .. " hashes\n")
+alog:write("STAT: precomputed " .. #teams * #flags .. " hashes\n")
 alog:write("STAT: bound to " .. ip_address .. ":" .. port .. "\n")
 alog:write("STAT: config file at " .. arg[1] .. "\n")
 alog:flush()
@@ -113,21 +113,21 @@ while true do
     if #payload == 32 and string.match(payload, "^[a-fA-F0-9]+$") then
       -- We want to account for md5sum implementations that output uppercase hex letters
       local hash = hashes[string.lower(payload)]
-      if hash then -- If the hash they gave us is a valid one (e.g., real team, real key)
+      if hash then -- If the hash they gave us is a valid one (e.g., real team, real flag)
         if hash.complete then
           s:sendto("ALREADY CAPTURED\n", addr, port)
-          alog:write("["..os.date().."] ALREADY CAPTURED: '" .. hash.team .. "', key #" .. hash.number .. ", " .. addr .. "\n")
+          alog:write("["..os.date().."] ALREADY CAPTURED: '" .. hash.team .. "', flag #" .. hash.number .. ", " .. addr .. "\n")
           alog:flush()
         else -- If this is the first time this hash has been done, we write to the log
           hash.complete = true
-          s:sendto("CONGRATULATIONS - KEY "..tostring(hash.number).." CAPTURED\n", addr, port)
-          clog:write("["..os.date("%a %I:%M%p").."] Team '" .. hash.team .. "' captured key #" ..  tostring(hash.number) .. "!")
-          if show_key_info and hash.desc then
+          s:sendto("CONGRATULATIONS - FLAG "..tostring(hash.number).." CAPTURED\n", addr, port)
+          clog:write("["..os.date("%a %I:%M%p").."] Team '" .. hash.team .. "' captured flag #" ..  tostring(hash.number) .. "!")
+          if show_flag_info and hash.desc then
             clog:write(" (" .. hash.desc .. ")") -- include the hash description if there is one present, and they are not globally disabled
           end
           clog:write("\n")
           clog:flush()
-          alog:write("["..os.date().."] CAPTURE: '" .. hash.team .. "', key #" .. hash.number .. ", " .. addr .. "\n")
+          alog:write("["..os.date().."] CAPTURE: '" .. hash.team .. "', flag #" .. hash.number .. ", " .. addr .. "\n")
           alog:flush()
         end
       else -- If there is no matching hash

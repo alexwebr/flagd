@@ -6,8 +6,8 @@ teams =  {
   "Taking a Wikileak",
 }
 
--- This is the listing of the secret keys that the teams are supposed to find
-keys = {
+-- This is the listing of the secret flags that the teams are supposed to find
+flags = {
   { val = "ec92c924b9a76327ac53fb8668d7398c", desc="Got Administrator on Win2k3 server" },
   { val = "480748d06d43885b2ad22dd3812db154", desc="Exploited MySQL" },
   { val = "480748d06d43885b2ad22dd3812db154", desc="Recovered files from fubar filesystem" },
@@ -20,7 +20,7 @@ capture_log = "capture.log"
 admin_log = "admin.log"
 -- The IP address to bind to. '*' binds to all addresses
 ip_address = "*"
--- The number of seconds an IP will be prevented from attempting to submit a key.
+-- The number of seconds an IP will be prevented from attempting to submit a flag.
 submission_delay = 5
--- Display key descriptions? Sometimes descriptions can give hints to other teams.
-show_key_info = true
+-- Display flag descriptions? Sometimes descriptions can give hints to other teams.
+show_flag_info = true
