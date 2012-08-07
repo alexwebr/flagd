@@ -37,7 +37,7 @@ required_configs = {
   { param = "capture_log",     type = "string" },
   { param = "ip_address",      type = "string" },
   { param = "submission_delay",type = "number" },
-  { param = "show_flag_info",   type = "boolean" },
+  { param = "show_flag_descriptions",   type = "boolean" },
 }
 -- Validate configuration
 for _,v in ipairs(required_configs) do
@@ -122,7 +122,7 @@ while true do
           hash.complete = true
           s:sendto("CONGRATULATIONS - FLAG "..tostring(hash.number).." CAPTURED\n", addr, port)
           clog:write("["..os.date("%a %I:%M%p").."] Team '" .. hash.team .. "' captured flag #" ..  tostring(hash.number) .. "!")
-          if show_flag_info and hash.desc then
+          if show_flag_descriptions and hash.desc then
             clog:write(" (" .. hash.desc .. ")") -- include the hash description if there is one present, and they are not globally disabled
           end
           clog:write("\n")
