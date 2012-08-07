@@ -74,7 +74,7 @@ hashes = {}
 for _,t in ipairs(teams) do
   for i,f in ipairs(flags) do
     -- Index the table by the hash FOR SPEED
-    hashes[ hash(t .. ":" .. string.lower(f.sec)) ] = {team = t, number = i, desc = f.desc, complete = false}
+    hashes[ hash(t.name .. ":" .. t.pass .. ":" .. string.lower(f.sec)) ] = {team = t.name, number = i, desc = f.desc, complete = false}
   end
 end
 print " done."

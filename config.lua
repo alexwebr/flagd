@@ -1,9 +1,9 @@
 -- This is a list of the team names
 teams =  {
-  "Nikogiri",
-  "Supermen",
-  "Hon-Hai Connection",
-  "Taking a Wikileak",
+  { name = "Nikogiri", pass = "superpass" },
+  { name = "Supermen", pass = "hunter2" },
+  { name = "Hon-Hai Connection", pass = "$blitz12" },
+  { name = "Taking a Wikileak", pass = "%%he11083?w0rld" },
 }
 
 -- This is the listing of the secret flags that the teams are supposed to find

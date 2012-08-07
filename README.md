@@ -17,26 +17,26 @@ A good candidate for a flag is `head -c 100 /dev/urandom | sha256sum`
 
 Participants are organized into teams
 
-MD5 is not so terrible that the output of MD5(TEAM:FLAG_STRING), where TEAM is known, allows for recovery of FLAG_STRING in any reasonable amount of time.
+MD5 is not so terrible that the output of MD5(TEAM_NAME:TEAM_PASS:FLAG_STRING), where TEAM_NAME is known, allows for recovery of FLAG_STRING or TEAM_PASS in any reasonable amount of time.
 
 Teams know how to use netcat, md5sum, etc.
 
 The protocol
 ----------
-When a team finds a flag, they produce the following hash: MD5(TEAM_NAME:FLAG_STRING), and they
+When a team finds a flag, they produce the following hash: MD5(TEAM_NAME:TEAM_PASS:FLAG_STRING), and they
 send it as a simple UDP datagram to the flagd server. The flagd server responds with a
 message (on the same port the client sent the packet from), indicating that the flag was
 captured (or not)
 
 In bash:
-`echo -n "MyTeamName:flag_string" | md5sum | nc -u <ip> <port>`
+`echo -n "MyTeamName:hunter2:flag_string" | md5sum | nc -u <ip> <port>`
 
 How it works
 -------------
-flagd calculates all of the hashes for all of the configured team:flag_string combinations.
+flagd calculates all of the hashes for all of the configured team_name:team_pass:flag_string combinations.
 When a user submits an MD5 hash, it's used as a key into a hash table - if it matches,
-it's a valid flag for SOME combination of team:flag - the value pointed to in the hash
-table is a Lua table has that information. This makes flagd very fast. The use of hash tables in this way
+it's a valid flag for _some_ flag - the value pointed to in the hash
+table is a Lua table that has that information. This makes flagd very fast. The use of hash tables in this way
 also prevents many timing attacks.
 
 flagd prevents brute force attacks by allowing an IP to make one submission per X number
