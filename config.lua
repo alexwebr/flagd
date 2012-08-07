@@ -8,9 +8,9 @@ teams =  {
 
 -- This is the listing of the secret flags that the teams are supposed to find
 flags = {
-  { val = "ec92c924b9a76327ac53fb8668d7398c", desc="Got Administrator on Win2k3 server" },
-  { val = "480748d06d43885b2ad22dd3812db154", desc="Exploited MySQL" },
-  { val = "480748d06d43885b2ad22dd3812db154", desc="Recovered files from fubar filesystem" },
+  { sec = "ec92c924b9a76327ac53fb8668d7398c", desc="Got Administrator on Win2k3 server" },
+  { sec = "480748d06d43885b2ad22dd3812db154", desc="Exploited MySQL" },
+  { sec = "480748d06d43885b2ad22dd3812db154", desc="Recovered files from fubar filesystem" },
 }
 
 -- The port to bind to

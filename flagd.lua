@@ -72,9 +72,9 @@ io.write("Precalculating " .. tostring(#teams * #flags) .. " hashes before accep
 io.flush()
 hashes = {}
 for _,t in ipairs(teams) do
-  for i,k in ipairs(flags) do
+  for i,f in ipairs(flags) do
     -- Index the table by the hash FOR SPEED
-    hashes[ hash(t .. ":" .. string.lower(k.val)) ] = {team = t, number = i, desc = k.desc, complete = false}
+    hashes[ hash(t .. ":" .. string.lower(f.sec)) ] = {team = t, number = i, desc = f.desc, complete = false}
   end
 end
 print " done."
