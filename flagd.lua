@@ -106,8 +106,11 @@ last_submission_time = {}
 -- Main packet receiving/processing/responding loop
 -- No async here! We block on receivefrom()
 while true do
-  -- We use MD5, we so only accept 32 bytes per datagram
-  local payload, addr, port = s:receivefrom(32)
+  -- We could specify a maximum packet length, but that causes Windows to drop
+  -- the packet and return with an error, instead of just truncating it like Linux
+  local payload, addr, port = s:receivefrom()
+  -- We want to be a bit forgiving on trailing newlines and such, so we just use the first 32 chars
+  payload = string.sub(payload, 1, 32)
 
   -- If an IP has tried already in the last submission_delay seconds, tell them and don't process the submission
   if os.time() - (last_submission_time[addr] or 0) < submission_delay then
