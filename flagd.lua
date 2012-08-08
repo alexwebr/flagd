@@ -28,6 +28,11 @@ if not arg[1] then
   print "ERROR: You must specify a path to a configuration file"
   os.exit(5)
 end
+if #arg ~= 1 then
+  print "ERROR: flagd takes a single argument - a path to the configuration file"
+  os.exit(8)
+end
+
 dofile(tostring(arg[1]))
 required_configs = {
   { param = "teams",           type = "table"  },
