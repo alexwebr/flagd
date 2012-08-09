@@ -86,9 +86,9 @@ print " done."
 
 -- Create our single listening socket - we send and receive with this
 s = socket.udp()
-s:setsockname(ip_address, port)
-if not s:getsockname() then
-  print("ERROR: Could not bind to port " .. tostring(port))
+ok,msg = s:setsockname(ip_address, port)
+if not ok then
+  print("ERROR: Could not bind to " .. ip_address .. ":" .. port .. " [" .. msg .. "]")
   os.exit(3)
 end
 print("flagd up and listening on " .. ip_address .. ":" .. port .. " (started in " .. os.clock() .. " seconds)")
