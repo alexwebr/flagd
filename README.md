@@ -33,7 +33,7 @@ In bash:
 
 How it works
 -------------
-flagd calculates all of the hashes for all of the configured team_name:team_pass:flag_string combinations.
+flagd calculates all of the hashes for all of the configured `TEAM_NAME:TEAM_PASS:FLAG_STRING` combinations.
 When a user submits an MD5 hash, it's used as a key into a hash table - if it matches,
 it's a valid flag for _some_ flag - the value pointed to in the hash
 table is a Lua table that has that information. This makes flagd very fast. The use of hash tables in this way
