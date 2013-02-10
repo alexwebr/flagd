@@ -15,13 +15,17 @@ flags = {
 
 -- The port to bind to
 port = 9001
+
 -- The file to log to
 capture_log = "capture.log"
 admin_log = "admin.log"
+
 -- The IP address to bind to. '*' binds to all addresses
 ip_address = "*"
+
 -- The number of seconds an IP will be prevented from attempting to submit a flag.
 submission_delay = 5
+
 -- Show a flag's description in the capture log? Sometimes descriptions can give hints to other teams.
 -- If you wish to only hide descriptions for certain flags, simply leave a flag without a description
 show_flag_descriptions = true
